@@ -1,49 +1,55 @@
-import React from 'react';
+import React , {useState} from 'react';
 
 
-class Register extends React.Component {
+function Register ({onLogin,onRouteChange}) {
 	
-   constructor(props){
-   	super(props);
-   	this.state = {
-   		name : '',
-   		email: '',
-   		password: ''
-   	}
-   }
+   // constructor(props){
+   // 	super(props);
+   // 	this.state = {
+   // 		name : '',
+   // 		email: '',
+   // 		password: ''
+   // 	}
+   // }
+   const [name,setName] = useState('');
+   const [email,setEmail] = useState('');
+   const [password,setPassword] = useState('');
 
 
-   onEmailChange = (event)=>{
-   	this.setState({email : event.target.value})
+   const onEmailChange = (event)=>{
+   	// this.setState({email : event.target.value})
+    setEmail(event.target.value);
    }
-   onNameChange = (event)=>{
-   	this.setState({name : event.target.value})
+   const onNameChange = (event)=>{
+   	// this.setState({name : event.target.value})
+    setName(event.target.value);
    }
-   onPasswordChange = (event)=>{
-   	this.setState({password : event.target.value})
+   const onPasswordChange = (event)=>{
+   	// this.setState({password : event.target.value}) 
+    setPassword(event.target.value);
    }
    
-   onRegister = ()=>{
+   const onRegister = ()=>{
    	fetch('https://peaceful-rocky-mountain-53218.herokuapp.com/register',{
         	method : 'post',
         	headers : {'Content-Type' : 'application/json'} ,
         	body : JSON.stringify({
-        		email : this.state.email,
-        		password: this.state.password,
-        		name : this.state.name
+        		email : email,
+        		password: password,
+        		name : name
         	})
 
        })
    	   .then(response=>response.json())
    	   .then(data =>{
-   	   	 this.props.onLogin(data);
+   	   	 onLogin(data);
    	   })
 
-   	  this.props.onRouteChange('home');
+   	  onRouteChange('home');
    	 
     } 
 
-    render(){
+    
 	return (
 		<main className="pa6 black-80">
 		  <div className="br3  measure center shadow-5 pa5 ma3 dib bg-black ">
@@ -51,20 +57,20 @@ class Register extends React.Component {
 		      <legend className="f2 fw6 ph0 mh0 white b">Register</legend>
 		      <div class="mt3">
 		        <label class="db fw6 lh-copy f4 white" htmlFor="name">Name</label>
-		        <input onChange={this.onNameChange} className="pa2 input-reset ba  hover-bg-black hover-white w-100 b--white" type="text" name="name"  id="name" />
+		        <input onChange={onNameChange} className="pa2 input-reset ba  hover-bg-black hover-white w-100 b--white" type="text" name="name"  id="name" />
 		      </div>
 		      <div class="mt3">
 		        <label class="db fw6 lh-copy f4 white" htmlFor="email-address">Email</label>
-		        <input onChange={this.onEmailChange} className="pa2 input-reset ba  hover-bg-black hover-white w-100  b--white" type="email" name="email-address"  id="email-address" />
+		        <input onChange={onEmailChange} className="pa2 input-reset ba  hover-bg-black hover-white w-100  b--white" type="email" name="email-address"  id="email-address" />
 		      </div>
 		      <div class="mv3">
 		        <label class="db fw6 lh-copy f4 white" htmlFor="password">Password</label>
-		        <input onChange={this.onPasswordChange} className="b pa2 input-reset ba hover-bg-black hover-white w-100  b--white" type="password" name="password"  id="password" />
+		        <input onChange={onPasswordChange} className="b pa2 input-reset ba hover-bg-black hover-white w-100  b--white" type="password" name="password"  id="password" />
 		      </div>
 		    </fieldset>
 		    <div className="">
 		      <input 
-		        onClick = {this.onRegister}
+		        onClick = {onRegister}
 		        className="b ph3 pv2 input-reset ba b--white bg-transparent grow pointer f4 dib white" 
 		        type="submit" 
 		        value="Register" />
@@ -73,7 +79,7 @@ class Register extends React.Component {
         </main>
 
 		)
-	} 
+	
 }
 
 export default Register;

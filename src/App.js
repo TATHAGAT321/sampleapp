@@ -1,4 +1,4 @@
-import React,{Component} from 'react';
+import React,{useState} from 'react';
 import './App.css';
 import Navigation from './components/Navigation/Navigation';
 import Home from './components/Home/Home';
@@ -7,59 +7,65 @@ import Register from './components/Register/Register';
 import Dashboard from './components/Dashboard/Dashboard';
 import tachyons from 'tachyons';
 
-class App extends Component {
+function App () {
   
-  constructor(){
-    super();
-    this.state = {
-      route : 'home',
-      isSignedIn : false,
-      user:{
-      username : '',
-      emailid: '',
-      joined: new Date()
-     }
-    }
-  }
-  onLogin = (data)=>{
-    this.setState({
-      user : {
+  // constructor(){
+  //   super();
+  //   this.state = {
+  //     route : 'home',
+  //     isSignedIn : false,
+  //     user:{
+  //     username : '',
+  //     emailid: '',
+  //     joined: new Date()
+  //    }
+  //   }
+  // }
+  const [route,setRoute] = useState('home');
+  const [isSignedIn,setisSignedIn] = useState(false);
+  const [user,setUser] = useState(
+                                  {username : '',
+                                    emailid: '',
+                                    joined: new Date()
+                                  }
+                                 );
+  const onLogin = (data)=>{
+    setUser({
         username : data.name,
         emailid : data.emailid,
         joined : data.joined
-      } 
-    }); 
+      });
   }
-  onRouteChange = (route)=>{
-    if(route==='home' || route ==='dashboard'){
-     this.setState({isSignedIn : true})
+  const onRouteChange = (data)=>{
+    if(data==='home' || data ==='dashboard'){
+     // this.setState({isSignedIn : true})
+        setisSignedIn(true);
     }
     else{
-      this.setState({isSignedIn : false})
+      // this.setState({isSignedIn : false})
+      setisSignedIn(false);
     }
-    this.setState({route : route})
+    // this.setState({route : route})
+     setRoute(data);
   }
-  render(){
-    const {route} = this.state;
   return (
     <div className="App body">
-      <Navigation onRouteChange={this.onRouteChange} isSignedIn = {this.state.isSignedIn} route ={this.state.route} username={this.state.user.username}/>
+      <Navigation onRouteChange={onRouteChange} isSignedIn = {isSignedIn} route ={route} username={user.username}/>
       {
         (route === 'home') 
         ? <Home />
         : (
            (route === 'dashboard')
-            ? <Dashboard onRouteChange={this.onRouteChange} user={this.state.user} />
+            ? <Dashboard onRouteChange={onRouteChange} user={user} />
            : (
             (route === 'register')
-            ? <Register onRouteChange={this.onRouteChange} onLogin={this.onLogin} />
-            : <Login onRouteChange={this.onRouteChange} onLogin={this.onLogin} />
+            ? <Register onRouteChange={onRouteChange} onLogin={onLogin} />
+            : <Login onRouteChange={onRouteChange} onLogin={onLogin} />
             )
          )
       }      
     </div>
   )
- } 
 } 
 
 
